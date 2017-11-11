@@ -487,21 +487,9 @@ scoreJeu:      .word 0         # Score obtenu par le joueur
 ################################################################################
 
 majDirection:
+
 # En haut, ... en bas, ... à gauche, ... à droite, ... ces soirées là ...
 
-# prologue 
-
-# corps
-li $t4 4
-beq $a0 $t4 finMajDirection		# si 4 alors erreur alors meme direction qu'avant
-
-la $t0 snakeDir			# adresse de snakeDir
-li $t1 3
-sw $t1 0($t0)
-
-
-# epilogue
-finMajDirection:
 jr $ra
 
 ############################### updateGameStatus ###############################
@@ -517,10 +505,6 @@ updateGameStatus:
 
 # jal hiddenCheatFunctionDoingEverythingTheProjectDemandsWithoutHavingToWorkOnIt
 
-#prologue:
-		# allouer place sur la pile pour $s0
-
-# corps:
 li $t0 0
 li $t1 1
 li $t2 2
@@ -530,42 +514,11 @@ lw $t3 snakeDir		# affecter la valeur de direction dans t3
 la $t4 snakePosX	# adresse du tableau X dans t4
 la $t5 snakePosY	# adresse du tableau Y dans t5
 
-beq $t3 $t0 deplaceHaut
-beq $t3 $t1 deplaceDroite
-beq $t3 $t2 deplaceBas
-
-deplaceGauche:		# y--
-
-lw $t6 0($t5)
-sub $t6 $t6 $t1	
-sw $t6 0($t5)
-
-j finDeplace
-
-deplaceHaut:		# x--
-
-lw $t6 0($t4)
-sub $t6 $t6 $t1	
-sw $t6 0($t4)
-
-j finDeplace
-
-deplaceDroite:		# y++
 
 lw $t6 0($t5)
 add $t6 $t6 $t1	
 sw $t6 0($t5)
 
-j finDeplace
-
-deplaceBas:		# x++
-
-lw $t6 0($t4)
-add $t6 $t6 $t1	
-sw $t6 0($t4)
-
-# epilogue 
-finDeplace:
 jr $ra
 
 ############################### conditionFinJeu ################################
