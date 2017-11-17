@@ -493,11 +493,11 @@ majDirection:
 
 # corps
 li $t4 4
-beq $a0 $t4 finMajDirection		# si 4 alors erreur alors meme direction qu'avant
+move $t0 $a0				# travailler sur variable temporaire
+beq $t0 $t4 finMajDirection		# si 4 alors erreur alors meme direction qu'avant
 
-la $t0 snakeDir			# adresse de snakeDir
-li $t1 3
-sw $t1 0($t0)
+la $t1 snakeDir			# adresse de snakeDir
+sw $t0 0($t1)
 
 
 # epilogue
@@ -518,54 +518,131 @@ updateGameStatus:
 # jal hiddenCheatFunctionDoingEverythingTheProjectDemandsWithoutHavingToWorkOnIt
 
 #prologue:
-		# allouer place sur la pile pour $s0
+subu $sp $sp 16			# allouer place sur la pile pour $s0 et $s1
+sw $s0 0($sp)
+sw $s1 4($sp)
+sw $s2 8($sp)
+sw $s3 12($sp)
 
 # corps:
-li $t0 0
+deplace:
+
+deplaceCorps:
+la $t0 tailleSnake
+lw $s4 0($t0)			# taille dans $s4
+
+la $s0 snakeDir			# adresse de la  direction dans $s0
+lw $s1 0($s0)			# valeur de la direction dans $s1
+
+la $s2 snakePosX			#t2 adresse de tableau de posiitons X
+la $s3 snakePosY			#t3 adresse de tableau de position Y
+
+li $t1 1
+beq $s4 $t1 deplaceTete
+
+subu $t7 $s2 4
+
+move $t0 $s4			# $t0 a la taille 
+subu $t0 $t0 2			# taille -2 dans t0
+mulu $t0 $t0 4
+add $s2 $t0 $s2
+add $s3 $t0 $s3
+
+For: beq $s2 $t7 deplaceTete
+lw $t4 0($s2)
+sw $t4 4($s2)
+subu $s2 $s2 4
+
+lw $t4 0($s3)
+sw $t4 4($s3)
+subu $s3 $s3 4
+
+b For
+
+deplaceTete:
+la $s0 snakeDir			# adresse de la  direction dans $s0
+lw $s1 0($s0)			# valeur de la direction dans $s1
+
+la $t2 snakePosX			#t2 adresse de tableau de posiitons X
+lw $s2 0($t2)			# x de la tete
+la $t3 snakePosY			#t3 adresse de tableau de position Y
+lw $s3 0($t3)			# y de la tete
+
 li $t1 1
 li $t2 2
 
-lw $t3 snakeDir		# affecter la valeur de direction dans t3
 
-la $t4 snakePosX	# adresse du tableau X dans t4
-la $t5 snakePosY	# adresse du tableau Y dans t5
+beqz $s1 deplaceTeteHaut
+beq $s1 $t1 deplaceTeteDroite
+beq $s1 $t2 deplaceTeteBas
 
-beq $t3 $t0 deplaceHaut
-beq $t3 $t1 deplaceDroite
-beq $t3 $t2 deplaceBas
+deplaceTeteGauche:		# y--
+la $t0 snakePosY		# adresse de snakePosY
+lw $t1 0($t0)			# position Y de la tete du serpent
+subu $t1 $t1 1			# $t1 nouvelle position Y
+sw $t1 0($t0)
+la $t0 snakePosX
+lw $t2 0($t0)			#t2 position de la tete axe X
 
-deplaceGauche:		# y--
+j testCandy
 
-lw $t6 0($t5)
-sub $t6 $t6 $t1	
-sw $t6 0($t5)
+deplaceTeteHaut:		# x++
+la $t0 snakePosX		# adresse de snakePosX
+lw $t1 0($t0)			# position X de la tete du serpent
+addi $t1 $t1 1
+sw $t1 0($t0)
+la $t0 snakePosY
+lw $t2 0($t0)			#t2 position de la tete axe Y
 
-j finDeplace
+j testCandy
 
-deplaceHaut:		# x--
+deplaceTeteDroite:		# y++
+la $t0 snakePosY		# adresse de snakePosY
+lw $t1 0($t0)			# position Y de la tete du serpent
+addi $t1 $t1 1
+sw $t1 0($t0)
+la $t0 snakePosX
+lw $t2 0($t0)			#t2 position de la tete axe X
 
-lw $t6 0($t4)
-sub $t6 $t6 $t1	
-sw $t6 0($t4)
+j testCandy
 
-j finDeplace
+deplaceTeteBas:		# x--
+la $t0 snakePosX		# adresse de snakePosX
+lw $t1 0($t0)			# position X de la tete du serpent
+subu $t1 $t1 1
+sw $t1 0($t0)
+la $t0 snakePosY
+lw $t2 0($t0)			#t2 position de la tete axe Y
 
-deplaceDroite:		# y++
+testCandy:
+# (t1, t2) contiennent la position de la tête (x,y)
+# on cherche la position du bonbon
 
-lw $t6 0($t5)
-add $t6 $t6 $t1	
-sw $t6 0($t5)
+la $t0 candy
+lw $t3 0($t0)
+lw $t4 4($t0)		
 
-j finDeplace
+# (t3, t4) = (x,y) bonbon
+# test
 
-deplaceBas:		# x++
+bne $t1 $t3 finDeplace
+bne $t2 $t4 finDeplace
 
-lw $t6 0($t4)
-add $t6 $t6 $t1	
-sw $t6 0($t4)
+grandir:
+la $t0 tailleSnake
+lw $t5 0($t0)
+addi $t5 $t5 1			# taille++
+sw $t5 0($t0)
+
+# rattacher la queue..
 
 # epilogue 
 finDeplace:
+lw $s0 0($sp)
+lw $s1 4($sp)
+lw $s2 8($sp)
+lw $s3 12($sp)
+addi $sp $sp 16
 jr $ra
 
 ############################### conditionFinJeu ################################
