@@ -497,6 +497,40 @@ move $t0 $a0				# travailler sur variable temporaire
 beq $t0 $t4 finMajDirection		# si 4 alors erreur alors meme direction qu'avant
 
 la $t1 snakeDir			# adresse de snakeDir
+lw $t2 0($t1)			# on stocke la direction dans $t2
+
+li $t3 0
+beq $t2 $t3 dirHaut
+
+li $t3 1
+beq $t2 $t3 dirDroite
+
+li $t3 2
+beq $t2 $t3 dirBas
+
+dirGauche:
+li $t3 1
+beq $t0 $t3 finMajDirection
+
+j changerDirection
+
+dirBas:
+beqz $t0 finMajDirection
+
+j changerDirection
+
+dirDroite:
+li $t3 3
+beq $t0 $t3 finMajDirection
+
+j changerDirection
+
+dirHaut:
+li $t3 2
+beq $t0 $t3 finMajDirection
+
+
+changerDirection:
 sw $t0 0($t1)
 
 
@@ -525,6 +559,40 @@ sw $s2 8($sp)
 sw $s3 12($sp)
 
 # corps:
+la $t0 snakePosX
+lw $t1 0($t0)
+
+la $t0 snakePosY
+lw $t2 0($t0)
+
+
+testCandy:
+# (t1, t2) contiennent la position de la tête (x,y)
+# on cherche la position du bonbon
+
+la $t0 candy
+lw $t3 0($t0)
+lw $t4 4($t0)	
+
+# (t3, t4) = (x,y) bonbon
+# test
+
+bne $t1 $t3 deplace
+bne $t2 $t4 deplace
+
+grandir:
+la $t0 tailleSnake
+lw $t5 0($t0)
+addi $t5 $t5 1			# taille++
+sw $t5 0($t0)
+
+#la $t7 newRandomObjectPosition
+#jal $t7
+#la $t0 candy
+#sw $v0 0($t0)
+#sw $v1 4($t0)
+
+
 deplace:
 
 deplaceCorps:
@@ -581,60 +649,31 @@ la $t0 snakePosY		# adresse de snakePosY
 lw $t1 0($t0)			# position Y de la tete du serpent
 subu $t1 $t1 1			# $t1 nouvelle position Y
 sw $t1 0($t0)
-la $t0 snakePosX
-lw $t2 0($t0)			#t2 position de la tete axe X
 
-j testCandy
+j finDeplace
 
 deplaceTeteHaut:		# x++
 la $t0 snakePosX		# adresse de snakePosX
 lw $t1 0($t0)			# position X de la tete du serpent
 addi $t1 $t1 1
 sw $t1 0($t0)
-la $t0 snakePosY
-lw $t2 0($t0)			#t2 position de la tete axe Y
 
-j testCandy
+j finDeplace
 
 deplaceTeteDroite:		# y++
 la $t0 snakePosY		# adresse de snakePosY
 lw $t1 0($t0)			# position Y de la tete du serpent
 addi $t1 $t1 1
 sw $t1 0($t0)
-la $t0 snakePosX
-lw $t2 0($t0)			#t2 position de la tete axe X
 
-j testCandy
+j finDeplace
 
 deplaceTeteBas:		# x--
 la $t0 snakePosX		# adresse de snakePosX
 lw $t1 0($t0)			# position X de la tete du serpent
 subu $t1 $t1 1
 sw $t1 0($t0)
-la $t0 snakePosY
-lw $t2 0($t0)			#t2 position de la tete axe Y
 
-testCandy:
-# (t1, t2) contiennent la position de la tête (x,y)
-# on cherche la position du bonbon
-
-la $t0 candy
-lw $t3 0($t0)
-lw $t4 4($t0)		
-
-# (t3, t4) = (x,y) bonbon
-# test
-
-bne $t1 $t3 finDeplace
-bne $t2 $t4 finDeplace
-
-grandir:
-la $t0 tailleSnake
-lw $t5 0($t0)
-addi $t5 $t5 1			# taille++
-sw $t5 0($t0)
-
-# rattacher la queue..
 
 # epilogue 
 finDeplace:
