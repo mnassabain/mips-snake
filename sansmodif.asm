@@ -505,19 +505,16 @@ updateGameStatus:
 
 # jal hiddenCheatFunctionDoingEverythingTheProjectDemandsWithoutHavingToWorkOnIt
 
-li $t0 0
-li $t1 1
-li $t2 2
+jal newRandomObjectPosition
+move $t0 $v0
+move $t1 $v1
 
-lw $t3 snakeDir		# affecter la valeur de direction dans t3
+move $a0 $t0
+li $v0 1
+syscall
 
-la $t4 snakePosX	# adresse du tableau X dans t4
-la $t5 snakePosY	# adresse du tableau Y dans t5
-
-
-lw $t6 0($t5)
-add $t6 $t6 $t1	
-sw $t6 0($t5)
+move $a0 $t1
+syscall
 
 jr $ra
 

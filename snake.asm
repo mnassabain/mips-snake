@@ -552,11 +552,12 @@ updateGameStatus:
 # jal hiddenCheatFunctionDoingEverythingTheProjectDemandsWithoutHavingToWorkOnIt
 
 #prologue:
-subu $sp $sp 16			# allouer place sur la pile pour $s0 et $s1
-sw $s0 0($sp)
-sw $s1 4($sp)
+subu $sp $sp 20			# allouer place sur la pile pour $s0 et $s1
+sw $s0 16($sp)
+sw $s1 12($sp)
 sw $s2 8($sp)
-sw $s3 12($sp)
+sw $s3 4($sp)
+sw $ra 0($sp)
 
 # corps:
 la $t0 snakePosX
@@ -577,20 +578,50 @@ lw $t4 4($t0)
 # (t3, t4) = (x,y) bonbon
 # test
 
-bne $t1 $t3 deplace
-bne $t2 $t4 deplace
+bne $t1 $t3 deplace		# si il y a pas de bonbon on se deplace
+bne $t2 $t4 deplace		# si il n'y a pas de bonbon on se deplace
 
-grandir:
+grandir:			# si on trouve un bonbon on augmente la taille
 la $t0 tailleSnake
 lw $t5 0($t0)
 addi $t5 $t5 1			# taille++
 sw $t5 0($t0)
 
-#la $t7 newRandomObjectPosition
-#jal $t7
-#la $t0 candy
-#sw $v0 0($t0)
-#sw $v1 4($t0)
+jal newRandomObjectPosition	# on donne une nouvelle position aléatoire au bonbon
+move $t0 $v0
+move $t1 $v1
+la $t2 candy
+sw $t0 0($t2)
+sw $t1 4($t2)
+
+genereObstacle:
+la $s0 scoreJeu			# on recupere le score pour stocker le nouveau obstacle à la position
+lw $s1 0($s0)			#obstaclesPosX[score] et obstaclesPosY[score]
+
+mulu $t2 $s1 4			# t2 = s1 * 4 (t2 = score * 4)
+
+la $s2 obstaclesPosX		# adresses de tableaux des coordonnées des obstacles
+la $s3 obstaclesPosY
+
+add $s2 $s2 $t2
+add $s3 $s3 $t2
+
+jal newRandomObjectPosition
+move $t0 $v0
+move $t1 $v1			# (t0, t1) = (x, y) du nouveau obstacle
+
+sw $t0 0($s2)
+sw $t1 0($s3)
+
+scorePlus:
+addi $s1 $s1 1			# score++
+sw $s1 0($s0)
+
+
+#test:
+move $a0 $s1
+li $v0 1
+syscall
 
 
 deplace:
@@ -677,11 +708,13 @@ sw $t1 0($t0)
 
 # epilogue 
 finDeplace:
-lw $s0 0($sp)
-lw $s1 4($sp)
+lw $s0 16($sp)
+lw $s1 12($sp)
 lw $s2 8($sp)
-lw $s3 12($sp)
-addi $sp $sp 16
+lw $s3 4($sp)
+lw $ra 0($sp)
+
+addu $sp $sp 20
 jr $ra
 
 ############################### conditionFinJeu ################################
