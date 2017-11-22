@@ -439,7 +439,7 @@ jal updateGameStatus
 jal conditionFinJeu
 bnez $v0 gameOver
 jal printGame
-li $a0 500
+li $a0 500	# c'était a 500
 jal sleepMillisec
 j mainloop
 
@@ -730,7 +730,7 @@ jr $ra
 
 conditionFinJeu:
 # prolgoue:
-subu $sp $sp 32
+subu $sp $sp 36
 sw $s0 0($sp)
 sw $s1 4($sp)
 sw $s2 8($sp)
@@ -738,7 +738,8 @@ sw $s3 12($sp)
 sw $s4 16($sp)
 sw $s5 20($sp)
 sw $s6 24($sp)
-sw $a0 28($sp)
+sw $s7 28($sp)
+sw $a0 32($sp)
 #sw $v0 32($sp)
 # s1 & s2
 
@@ -755,10 +756,13 @@ la $s3 snakePosX
 lw $s4 0($s3)
 la $s5 snakePosY
 lw $s6 0($s5)
+li $s7 5			#compteur test cannibalisme
 
 testXObstacles: 
+beqz $s7 testmur
 beq $s0 $t3 pasObstacle
 lw $t6 0($s0)
+
 
 beq $s4 $t6 testYObstacles	# tester si x correspondent
 
@@ -773,16 +777,48 @@ beq $s6 $t7 perdu
 j miss
 
 pasObstacle:
-li $v0 0
+subi $s7 $s7 1
 j finTestObstacle
 
 perdu:
 li $v0 1
+j finTestes
 
 finTestObstacle:
 
+testCannibalisme:
 
+addi $s0 $s3 4
+addi $s1 $s5 4
+
+la $s2 tailleSnake
+lw $t2 0($s2)
+mulu $t2 $t2 4
+add $t3 $s3 $t2
+
+
+
+j testXObstacles
+
+
+testmur:
+la $s0 snakePosX
+lw $s1 0($s0)
+la $s2 snakePosY
+lw $s3 0($s2)
+
+la $s4 tailleGrille
+lw $s5 0($s4)
+
+bltz $s1 perdu
+bge $s1 $s5 perdu
+bltz $s3 perdu
+bge $s3 $s5 perdu
+
+continue:
+li $v0 0
 # épilogue:
+finTestes:
 lw $s0 0($sp)
 lw $s1 4($sp)
 lw $s2 8($sp)
@@ -790,9 +826,9 @@ lw $s3 12($sp)
 lw $s4 16($sp)
 lw $s5 20($sp)
 lw $s6 24($sp)
-lw $a0 28($sp)
-#lw $v0 32($sp)
-addi $sp $sp 32
+lw $s7 28($sp)
+lw $a0 32($sp)
+addi $sp $sp 36
 jr $ra
 
 ############################### affichageFinJeu ################################
