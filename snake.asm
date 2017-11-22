@@ -610,8 +610,14 @@ jal newRandomObjectPosition
 move $t0 $v0
 move $t1 $v1			# (t0, t1) = (x, y) du nouveau obstacle
 
+
 sw $t0 0($s2)
 sw $t1 0($s3)
+
+la $t0 numObstacles
+lw $t1 0($t0)
+addi $t1 $t1 1
+sw $t1 0($t0)
 
 scorePlus:
 addi $s1 $s1 1			# score++
@@ -723,10 +729,70 @@ jr $ra
 ################################################################################
 
 conditionFinJeu:
+# prolgoue:
+subu $sp $sp 32
+sw $s0 0($sp)
+sw $s1 4($sp)
+sw $s2 8($sp)
+sw $s3 12($sp)
+sw $s4 16($sp)
+sw $s5 20($sp)
+sw $s6 24($sp)
+sw $a0 28($sp)
+#sw $v0 32($sp)
+# s1 & s2
 
-# Aide: Remplacer cette instruction permet d'avancer dans le projet.
+# corps:
+la $s0 obstaclesPosX		# tableau avec la cordonné X des obstacles
+la $s1 obstaclesPosY		# tableau avec la cordonné Y des obstacles
+
+la $s2 numObstacles
+lw $t2 0($s2)
+#subi $t2 $t2 1			# la derniere adresse du tableau
+mulu $t2 $t2 4			# avec les octets
+add $t3 $t2 $s0			# snakePosX[numObstacles - 1]
+la $s3 snakePosX
+lw $s4 0($s3)
+la $s5 snakePosY
+lw $s6 0($s5)
+
+testXObstacles: 
+beq $s0 $t3 pasObstacle
+lw $t6 0($s0)
+
+beq $s4 $t6 testYObstacles	# tester si x correspondent
+
+miss:
+addi $s0 $s0 4
+addi $s1 $s1 4
+j testXObstacles
+
+testYObstacles:
+lw $t7 0($s1)
+beq $s6 $t7 perdu
+j miss
+
+pasObstacle:
 li $v0 0
+j finTestObstacle
 
+perdu:
+li $v0 1
+
+finTestObstacle:
+
+
+# épilogue:
+lw $s0 0($sp)
+lw $s1 4($sp)
+lw $s2 8($sp)
+lw $s3 12($sp)
+lw $s4 16($sp)
+lw $s5 20($sp)
+lw $s6 24($sp)
+lw $a0 28($sp)
+#lw $v0 32($sp)
+addi $sp $sp 32
 jr $ra
 
 ############################### affichageFinJeu ################################
