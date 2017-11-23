@@ -87,12 +87,16 @@ frameBuffer: .word 0 : 1024  # Frame buffer
 #   00 <= yy <= ff est la couleur verte en hexadécimal
 #   00 <= zz <= ff est la couleur bleue en hexadécimal
 
-colors: .word 0x00000000, 0x00ff0000, 0xff00ff00, 0x00396239, 0x00ff00ff
+colors: .word 0x00000000, 0x00ff0000, 0xff00ff00, 0x00396239, 0x00ff00ff, 0x00ffffff, 0x00000059
 .eqv black 0
 .eqv red   4
 .eqv green 8
 .eqv greenV2  12
 .eqv rose  16
+.eqv white 20
+.eqv vertpomme 24
+
+rainbow: .word 0x0000ffff, 0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493
 
 # Dernière position connue de la queue du serpent.
 
@@ -129,7 +133,7 @@ mul $t1 $t1 $t1
 sll $t1 $t1 2
 la $t0 frameBuffer
 addu $t1 $t0 $t1
-lw $t3 colors + black
+lw $t3 colors + vertpomme
 
 RALoop2: bge $t0 $t1 endRALoop2
   sw $t3 0($t0)
@@ -155,8 +159,11 @@ sw $s1 8($sp)
 lw $s0 tailleSnake
 sll $s0 $s0 2
 li $s1 0
+li $t7 4
 
-lw $a0 colors + greenV2
+lw $a0 rainbow
+
+lw $a0 rainbow
 lw $a1 snakePosX($s1)
 lw $a2 snakePosY($s1)
 jal printColorAtPosition
@@ -164,7 +171,7 @@ li $s1 4
 
 PSLoop:
 bge $s1 $s0 endPSLoop
-  lw $a0 colors + green
+  lw $a0 rainbow($s1)
   lw $a1 snakePosX($s1)
   lw $a2 snakePosY($s1)
   jal printColorAtPosition
@@ -202,7 +209,7 @@ li $s1 0
 
 POLoop:
 bge $s1 $s0 endPOLoop
-  lw $a0 colors + red
+  lw $a0 colors + white
   lw $a1 obstaclesPosX($s1)
   lw $a2 obstaclesPosY($s1)
   jal printColorAtPosition
@@ -239,7 +246,7 @@ eraseLastSnakePiece:
 subu $sp $sp 4
 sw $ra ($sp)
 
-lw $a0 colors + black
+lw $a0 colors + vertpomme
 lw $a1 lastSnakePiece
 lw $a2 lastSnakePiece + 4
 jal printColorAtPosition
@@ -439,7 +446,7 @@ jal updateGameStatus
 jal conditionFinJeu
 bnez $v0 gameOver
 jal printGame
-li $a0 500	# c'était a 500
+li $a0 100	# c'était a 500
 jal sleepMillisec
 j mainloop
 
@@ -472,6 +479,9 @@ obstaclesPosX: .word 0 : 1024  # Coordonnées X des obstacles
 obstaclesPosY: .word 0 : 1024  # Coordonnées Y des obstacles
 candy:         .word 0, 0      # Position du bonbon (X,Y)
 scoreJeu:      .word 0         # Score obtenu par le joueur
+
+message:		.asciiz "Votre score est: "
+
 
 .text
 
@@ -840,6 +850,16 @@ jr $ra
 ################################################################################
 
 affichageFinJeu:
+
+la $t0 scoreJeu
+
+la $a0 message
+li $v0 4
+syscall
+
+lw $a0 0($t0)
+li $v0 1
+syscall
 
 # Fin.
 
