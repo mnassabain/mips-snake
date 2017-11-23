@@ -87,12 +87,17 @@ frameBuffer: .word 0 : 1024  # Frame buffer
 #   00 <= yy <= ff est la couleur verte en hexadécimal
 #   00 <= zz <= ff est la couleur bleue en hexadécimal
 
-colors: .word 0x00000000, 0x00ff0000, 0xff00ff00, 0x00396239, 0x00ff00ff
+colors: .word 0x00000000, 0x00ff0000, 0xff00ff00, 0x00396239, 0x00ff00ff, 0x00ffffff, 0x00095228
 .eqv black 0
 .eqv red   4
 .eqv green 8
 .eqv greenV2  12
 .eqv rose  16
+.eqv white 20
+.eqv vertpomme 24
+
+rainbow: .word 0x0000ffff, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493, 0x00ff0000, 0x00ff3300, 0x00ffff00, 0x0000cc00, 0x00009999, 0x0099ff, 0x00ffcccc, 0x009900cc, 0x00ff0099, 0x0000ff00, 0x00fea347, 0x00ff1493
+
 
 # Dernière position connue de la queue du serpent.
 
@@ -129,7 +134,7 @@ mul $t1 $t1 $t1
 sll $t1 $t1 2
 la $t0 frameBuffer
 addu $t1 $t0 $t1
-lw $t3 colors + black
+lw $t3 colors + vertpomme
 
 RALoop2: bge $t0 $t1 endRALoop2
   sw $t3 0($t0)
@@ -155,8 +160,10 @@ sw $s1 8($sp)
 lw $s0 tailleSnake
 sll $s0 $s0 2
 li $s1 0
+li $t7 4
 
-lw $a0 colors + greenV2
+lw $a0 rainbow						###colors + greenV2	
+	
 lw $a1 snakePosX($s1)
 lw $a2 snakePosY($s1)
 jal printColorAtPosition
@@ -164,11 +171,18 @@ li $s1 4
 
 PSLoop:
 bge $s1 $s0 endPSLoop
-  lw $a0 colors + green
+
+beqz $t7 resetT7
+  
+  lw $a0 rainbow($s1)
   lw $a1 snakePosX($s1)
   lw $a2 snakePosY($s1)
   jal printColorAtPosition
   addu $s1 $s1 4
+  
+  addi $t6 $t6 4
+  subu $t7 $t7 1
+  
   j PSLoop
 endPSLoop:
 
@@ -183,6 +197,11 @@ lw $s0 4($sp)
 lw $s1 8($sp)
 addu $sp $sp 12
 jr $ra
+
+
+resetT7:
+li $t7 11
+j PSLoop
 
 ################################ printObstacles ################################
 # Paramètres: Aucun
@@ -202,7 +221,7 @@ li $s1 0
 
 POLoop:
 bge $s1 $s0 endPOLoop
-  lw $a0 colors + red
+  lw $a0 colors + white
   lw $a1 obstaclesPosX($s1)
   lw $a2 obstaclesPosY($s1)
   jal printColorAtPosition
@@ -239,7 +258,7 @@ eraseLastSnakePiece:
 subu $sp $sp 4
 sw $ra ($sp)
 
-lw $a0 colors + black
+lw $a0 colors + vertpomme
 lw $a1 lastSnakePiece
 lw $a2 lastSnakePiece + 4
 jal printColorAtPosition
@@ -439,7 +458,7 @@ jal updateGameStatus
 jal conditionFinJeu
 bnez $v0 gameOver
 jal printGame
-li $a0 500	# c'était a 500
+li $a0 150
 jal sleepMillisec
 j mainloop
 
@@ -472,6 +491,9 @@ obstaclesPosX: .word 0 : 1024  # Coordonnées X des obstacles
 obstaclesPosY: .word 0 : 1024  # Coordonnées Y des obstacles
 candy:         .word 0, 0      # Position du bonbon (X,Y)
 scoreJeu:      .word 0         # Score obtenu par le joueur
+
+# ajouter
+message: 	.asciiz "Votre score est: "
 
 .text
 
@@ -624,12 +646,6 @@ addi $s1 $s1 1			# score++
 sw $s1 0($s0)
 
 
-#test:
-move $a0 $s1
-li $v0 1
-syscall
-
-
 deplace:
 
 deplaceCorps:
@@ -730,7 +746,7 @@ jr $ra
 
 conditionFinJeu:
 # prolgoue:
-subu $sp $sp 36
+subu $sp $sp 32
 sw $s0 0($sp)
 sw $s1 4($sp)
 sw $s2 8($sp)
@@ -738,8 +754,7 @@ sw $s3 12($sp)
 sw $s4 16($sp)
 sw $s5 20($sp)
 sw $s6 24($sp)
-sw $s7 28($sp)
-sw $a0 32($sp)
+sw $a0 28($sp)
 #sw $v0 32($sp)
 # s1 & s2
 
@@ -756,13 +771,10 @@ la $s3 snakePosX
 lw $s4 0($s3)
 la $s5 snakePosY
 lw $s6 0($s5)
-li $s7 5			#compteur test cannibalisme
 
 testXObstacles: 
-beqz $s7 testmur
 beq $s0 $t3 pasObstacle
 lw $t6 0($s0)
-
 
 beq $s4 $t6 testYObstacles	# tester si x correspondent
 
@@ -777,48 +789,16 @@ beq $s6 $t7 perdu
 j miss
 
 pasObstacle:
-subi $s7 $s7 1
+li $v0 0
 j finTestObstacle
 
 perdu:
 li $v0 1
-j finTestes
 
 finTestObstacle:
 
-testCannibalisme:
 
-addi $s0 $s3 4
-addi $s1 $s5 4
-
-la $s2 tailleSnake
-lw $t2 0($s2)
-mulu $t2 $t2 4
-add $t3 $s3 $t2
-
-
-
-j testXObstacles
-
-
-testmur:
-la $s0 snakePosX
-lw $s1 0($s0)
-la $s2 snakePosY
-lw $s3 0($s2)
-
-la $s4 tailleGrille
-lw $s5 0($s4)
-
-bltz $s1 perdu
-bge $s1 $s5 perdu
-bltz $s3 perdu
-bge $s3 $s5 perdu
-
-continue:
-li $v0 0
 # épilogue:
-finTestes:
 lw $s0 0($sp)
 lw $s1 4($sp)
 lw $s2 8($sp)
@@ -826,9 +806,9 @@ lw $s3 12($sp)
 lw $s4 16($sp)
 lw $s5 20($sp)
 lw $s6 24($sp)
-lw $s7 28($sp)
-lw $a0 32($sp)
-addi $sp $sp 36
+lw $a0 28($sp)
+#lw $v0 32($sp)
+addi $sp $sp 32
 jr $ra
 
 ############################### affichageFinJeu ################################
@@ -840,6 +820,19 @@ jr $ra
 ################################################################################
 
 affichageFinJeu:
+#prologue:
+
+#corps:
+la $t0 scoreJeu
+
+la $a0 message
+li $v0 4
+syscall			# afficher 'Votre score est:'
+
+lw $a0 0($t0)
+li $v0 1
+syscall
+
 
 # Fin.
 
