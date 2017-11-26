@@ -481,6 +481,7 @@ candy:         .word 0, 0      # Position du bonbon (X,Y)
 scoreJeu:      .word 0	       # Score obtenu par le joueur
 
 message:		.asciiz "Votre score est: "
+sdl:			.asciiz "\n"
 
 # affichage 
 tmpX:		.word 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
@@ -525,7 +526,6 @@ chiffre8Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 0, 2, 0, 1, 2
 
 chiffre9X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 4, 4, 4
 chiffre9Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 2, 0, 1, 2
-
 
 
 .text
@@ -649,6 +649,7 @@ la $t2 candy
 sw $t0 0($t2)
 sw $t1 4($t2)
 
+
 genereObstacle:
 la $s0 scoreJeu			# on recupere le score pour stocker le nouveau obstacle à la position
 lw $s1 0($s0)			#obstaclesPosX[score] et obstaclesPosY[score]
@@ -675,11 +676,37 @@ addi $t1 $t1 1
 sw $t1 0($t0)
 
 scorePlus:
+# ici l'adresse du score est $s0
+# et la valeur du score est dans $s1
 addi $s1 $s1 1			# score++
+
+niveauPlus:
+li $t0 100
+div $s1 $t0
+mfhi $t1
+
+li $t2 3
+bne $t2 $t1 afficheScore
+addi $s1 $s1 97
+
+la $t0 tailleSnake
+li $t1 1
+sw $t1 0($t0)
+
+la $t0 numObstacles
+li $t1 0
+sw $t1 0($t0)
+
+afficheScore:
 sw $s1 0($s0)
+la $t0 scoreJeu
+lw $a0 0($t0)
+li $v0 1
+syscall
 
-
-
+la $a0 sdl
+li $v0 4
+syscall
 
 deplace:
 
@@ -971,6 +998,7 @@ li $t1 100
 
 div $t0 $t1
 mflo $s0 	# s0 à le niveau
+addi $s0 $s0 1
 mfhi $t7	# t7 à le score
 
 # jusqua ici ca marche
