@@ -478,7 +478,7 @@ numObstacles:  .word 0         # Nombre actuel d'obstacle présent dans le jeu.
 obstaclesPosX: .word 0 : 1024  # Coordonnées X des obstacles
 obstaclesPosY: .word 0 : 1024  # Coordonnées Y des obstacles
 candy:         .word 0, 0      # Position du bonbon (X,Y)
-scoreJeu:      .word 315        # Score obtenu par le joueur
+scoreJeu:      .word 700	       # Score obtenu par le joueur
 
 message:		.asciiz "Votre score est: "
 
@@ -1088,7 +1088,7 @@ j finSwitch
 cestSept:
 la $s1 chiffre7X
 la $s2 chiffre7Y
-li $s3 7
+li $s3 9
 
 j finSwitch
 
