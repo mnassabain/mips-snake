@@ -478,11 +478,14 @@ numObstacles:  .word 0         # Nombre actuel d'obstacle présent dans le jeu.
 obstaclesPosX: .word 0 : 1024  # Coordonnées X des obstacles
 obstaclesPosY: .word 0 : 1024  # Coordonnées Y des obstacles
 candy:         .word 0, 0      # Position du bonbon (X,Y)
-scoreJeu:      .word 0         # Score obtenu par le joueur
+scoreJeu:      .word 315        # Score obtenu par le joueur
 
 message:		.asciiz "Votre score est: "
 
 # affichage 
+tmpX:		.word 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+tmpY:		.word 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+
 lettreL1X:	.word 1, 2, 3, 4, 5, 5
 lettreL1Y:	.word 1, 1, 1, 1, 1, 2
 
@@ -522,6 +525,7 @@ chiffre8Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 0, 2, 0, 1, 2
 
 chiffre9X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 4, 4, 4
 chiffre9Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 2, 0, 1, 2
+
 
 
 .text
@@ -888,6 +892,16 @@ jr $ra
 
 affichageFinJeu:
 
+subu $sp $sp 20
+sw $ra 0($sp)
+sw $s0 4($sp)
+sw $s1 8($sp)
+sw $s2 12($sp)
+sw $s3 16($sp)
+
+
+
+
 la $t0 scoreJeu
 
 la $a0 message
@@ -898,13 +912,10 @@ lw $a0 0($t0)
 li $v0 1
 syscall
 
+jal resetAffichage
+
 # afficher niveau
 afficheLVL:
-subu $sp $sp 12
-sw $ra 0($sp)
-sw $s0 4($sp)
-sw $s1 8($sp)
-
 
 #afficher le premier L
 li $s0 6
@@ -951,15 +962,231 @@ bge $s1 $s0 endPOLoopL2
   j POLoopL2
 endPOLoopL2:
 
+# nouveau
 
+extraireNiveau:
+la $s0 scoreJeu
+lw $t0 0($s0)
+li $t1 100
+
+div $t0 $t1
+mflo $s0 	# s0 à le niveau
+mfhi $t7	# t7 à le score
+
+# jusqua ici ca marche
+
+
+# afficher niveau
+j switcher				# switch marche bien
+finSwitch:
+# on a le tableau X dans s1
+# le tableau Y dans s2
+# le numéro de bits dans $s3
+li $t6 1
+j decalerX
+finDecalageX:
+
+li $t6 12
+j decalerY
+finDecalageY:
+
+
+
+jal printChiffre
+
+j finito
+
+#noveau
+
+
+decalerX:
+# decalage dans t6
+# adresse du chiffre dans s1
+# chiffre à afficher s0
+
+move $t3 $s3
+
+la $t5 tmpX
+
+decXLoop:
+beqz $t3 finDecalageX
+lw $t4 0($s1)
+
+add $t4 $t4 $t6
+sw $t4 0($t5)
+
+addi $s1 $s1 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decXLoop
+
+
+#decaler le lettre sur l'axe Y
+decalerY:
+move $t3 $s3
+
+la $t5 tmpY
+
+decYLoop:
+beqz $t3 finDecalageY
+lw $t4 0($s2)
+add $t4 $t6 $t4
+sw $t4 0($t5)
+
+addi $s2 $s2 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decYLoop
+
+
+
+# renvoie l'adresse des tableaux X et Y du chiffre donné
+# chiffre cherché en $s0
+# renvoie le resultat dans $s1 et $s2
+# nombre de bits dans $s3
+switcher:
+beqz $s0 cestZero
+
+li $t0 1
+beq $s0 $t0 cestUn
+
+li $t0 2
+beq $s0 $t0 cestDeux
+
+li $t0 3
+beq $s0 $t0 cestTrois
+
+li $t0 4
+beq $s0 $t0 cestQuatre
+
+li $t0 5
+beq $s0 $t0 cestCinq
+
+li $t0 6
+beq $s0 $t0 cestSix
+
+li $t0 7
+beq $s0 $t0 cestSept
+
+li $t0 8
+beq $s0 $t0 cestHuit
+
+cestNeuf:
+la $s1 chiffre9X
+la $s2 chiffre9Y
+li $s3 12
+
+j finSwitch
+
+cestHuit:
+la $s1 chiffre8X
+la $s2 chiffre8Y
+li $s3 13
+
+j finSwitch
+
+cestSept:
+la $s1 chiffre7X
+la $s2 chiffre7Y
+li $s3 7
+
+j finSwitch
+
+cestSix:
+la $s1 chiffre6X
+la $s2 chiffre6Y
+li $s3 12
+
+j finSwitch
+
+cestCinq:
+la $s1 chiffre5X
+la $s2 chiffre5Y
+li $s3 11
+
+j finSwitch
+
+cestQuatre:
+la $s1 chiffre4X
+la $s2 chiffre4Y
+li $s3 9
+
+j finSwitch
+
+cestTrois:
+la $s1 chiffre3X
+la $s2 chiffre3Y
+li $s3 11
+
+j finSwitch
+
+cestDeux:
+la $s1 chiffre2X
+la $s2 chiffre2Y
+li $s3 12
+
+j finSwitch
+
+cestUn:
+la $s1 chiffre1X
+la $s2 chiffre1Y
+li $s3 5
+
+j finSwitch
+
+cestZero:
+la $s1 chiffre0X
+la $s2 chiffre0Y
+li $s3 12
+
+j finSwitch
+
+printChiffre:
+subi $sp $sp 4
+sw $ra 0($sp)
+
+
+move $t3 $s3
+la $t5 tmpX
+la $t6 tmpY
+
+PCLoop: 
+
+beqz $t3 endPCLoop
+
+  lw $a1 0($t5)
+  
+  lw $a0 0($t5)
+  li $v0 1
+  syscall
+  
+  lw $a2 0($t6)
+  
+  lw $a2 0($t6)
+  li $v0 1
+  syscall
+  
+  lw $a0 colors + white
+  jal printColorAtPosition
+ 
+  subu $t3 $t3 1
+  addi $t5 $t5 4
+  addi $t6 $t6 4
+  j PCLoop
+
+endPCLoop:
+lw $ra 0($sp)
+addi $sp $sp 4
+jr $ra
+
+
+finito:
 lw $ra 0($sp)
 lw $s0 4($sp)
 lw $s1 8($sp)
-addu $sp $sp 12
+lw $s2 12($sp)
+lw $s3 16($sp)
+addu $sp $sp 20
 jr $ra
 
-
-
-# Fin.
-
-jr $ra
+  
