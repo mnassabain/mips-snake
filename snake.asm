@@ -446,7 +446,18 @@ jal updateGameStatus
 jal conditionFinJeu
 bnez $v0 gameOver
 jal printGame
-li $a0 500	# c'était a 500
+
+# pour les niveaux
+li $a0 500
+la $t0 scoreJeu
+lw $t2 0($t0)
+li $t1 100
+div $t2 $t1
+mflo $t2
+mul $t2 $t2 $t1
+
+sub $a0 $a0 $t2
+
 jal sleepMillisec
 j mainloop
 
@@ -482,6 +493,7 @@ scoreJeu:      .word 0	       # Score obtenu par le joueur
 
 message:		.asciiz "Votre score est: "
 sdl:			.asciiz "\n"
+niv:			.asciiz "Niveau: "
 
 # affichage 
 tmpX:		.word 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
@@ -518,8 +530,8 @@ chiffre5Y:	.word 0, 1, 2, 0, 0, 1, 2, 2, 0, 1, 2
 chiffre6X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 3, 4, 4, 4
 chiffre6Y:	.word 0, 1, 2, 0, 0, 1, 2, 0, 2, 0, 1 ,2
 
-chiffre7X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 4
-chiffre7Y:	.word 0, 1, 2, 2, 1, 2, 3, 2, 2
+chiffre7X:	.word 0, 0, 0, 1, 2, 2, 3, 4
+chiffre7Y:	.word 0, 1, 2, 2, 1, 2, 2, 2
 
 chiffre8X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4
 chiffre8Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 0, 2, 0, 1, 2
@@ -654,6 +666,10 @@ genereObstacle:
 la $s0 scoreJeu			# on recupere le score pour stocker le nouveau obstacle à la position
 lw $s1 0($s0)			#obstaclesPosX[score] et obstaclesPosY[score]
 
+li $t0 100
+div $s1 $t0
+mfhi $s1
+
 mulu $t2 $s1 4			# t2 = s1 * 4 (t2 = score * 4)
 
 la $s2 obstaclesPosX		# adresses de tableaux des coordonnées des obstacles
@@ -689,8 +705,19 @@ li $t2 3
 bne $t2 $t1 afficheScore
 addi $s1 $s1 97
 
+jal resetAffichage
+
+la $t0 snakePosX
+li $t1 0
+sw $t1 0($t0)
+la $t0 snakePosY
+sw $t1 0($t0)
+
 la $t0 tailleSnake
 li $t1 1
+sw $t1 0($t0)
+
+la $t0 snakeDir
 sw $t1 0($t0)
 
 la $t0 numObstacles
