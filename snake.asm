@@ -1155,17 +1155,7 @@ PCLoop:
 beqz $t3 endPCLoop
 
   lw $a1 0($t5)
-  
-  lw $a0 0($t5)
-  li $v0 1
-  syscall
-  
   lw $a2 0($t6)
-  
-  lw $a2 0($t6)
-  li $v0 1
-  syscall
-  
   lw $a0 colors + white
   jal printColorAtPosition
  
