@@ -634,10 +634,6 @@ addi $s1 $s1 1			# score++
 sw $s1 0($s0)
 
 
-#test:
-move $a0 $s1
-li $v0 1
-syscall
 
 
 deplace:
