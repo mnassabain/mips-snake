@@ -508,6 +508,21 @@ chiffre3Y:	.word 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2
 chiffre4X:	.word 0, 0, 1, 1, 2, 2, 2, 3, 4
 chiffre4Y:	.word 0, 2, 0, 2, 0, 1, 2, 2, 2
 
+chiffre5X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 4, 4, 4
+chiffre5Y:	.word 0, 1, 2, 0, 0, 1, 2, 2, 0, 1, 2
+
+chiffre6X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 3, 4, 4, 4
+chiffre6Y:	.word 0, 1, 2, 0, 0, 1, 2, 0, 2, 0, 1 ,2
+
+chiffre7X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 4
+chiffre7Y:	.word 0, 1, 2, 2, 0, 1, 2, 2, 2
+
+chiffre8X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4
+chiffre8Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 0, 2, 0, 1, 2
+
+chiffre9X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 4, 4, 4
+chiffre9Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 2, 0, 1, 2
+
 
 .text
 
