@@ -482,6 +482,32 @@ scoreJeu:      .word 0         # Score obtenu par le joueur
 
 message:		.asciiz "Votre score est: "
 
+# affichage 
+lettreL1X:	.word 1, 2, 3, 4, 5, 5
+lettreL1Y:	.word 1, 1, 1, 1, 1, 2
+
+lettreVX: 	.word 1, 1, 2, 2, 3, 3, 4, 4, 5
+lettreVY:	.word 4, 6, 4, 6, 4, 6, 4, 6, 5
+
+lettreL2X:	.word 1, 2, 3, 4, 5, 5
+lettreL2Y:	.word 8, 8, 8, 8, 8, 9
+
+# chiffres
+chiffre0X:	.word 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4
+chiffre0Y:	.word 0, 1, 2, 0, 2, 0, 2, 0, 2, 0, 1, 2
+
+chiffre1X:	.word 0, 1, 2, 3, 4
+chiffre1Y:	.word 2, 2, 2, 2, 2
+
+chiffre2X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 4, 4, 4
+chiffre2Y:	.word 0, 1, 2, 2, 0, 1, 2, 0, 0, 1, 2
+
+chiffre3X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 4, 4, 4
+chiffre3Y:	.word 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2
+
+chiffre4X:	.word 0, 0, 1, 1, 2, 2, 2, 3, 4
+chiffre4Y:	.word 0, 2, 0, 2, 0, 1, 2, 2, 2
+
 
 .text
 
@@ -856,6 +882,68 @@ syscall
 lw $a0 0($t0)
 li $v0 1
 syscall
+
+# afficher niveau
+afficheLVL:
+subu $sp $sp 12
+sw $ra 0($sp)
+sw $s0 4($sp)
+sw $s1 8($sp)
+
+
+#afficher le premier L
+li $s0 6
+sll $s0 $s0 2
+li $s1 0
+
+POLoopL1:
+bge $s1 $s0 endPOLoopL1
+  lw $a0 colors + white
+  lw $a1 lettreL1X($s1)
+  lw $a2 lettreL1Y($s1)
+  jal printColorAtPosition
+  addu $s1 $s1 4
+  j POLoopL1
+endPOLoopL1:
+
+#afficher le V
+li $s0 9
+sll $s0 $s0 2
+li $s1 0
+
+POLoopV:
+bge $s1 $s0 endPOLoopV
+  lw $a0 colors + white
+  lw $a1 lettreVX($s1)
+  lw $a2 lettreVY($s1)
+  jal printColorAtPosition
+  addu $s1 $s1 4
+  j POLoopV
+endPOLoopV:
+
+# afficher le deuxième L
+li $s0 6
+sll $s0 $s0 2
+li $s1 0
+
+POLoopL2:
+bge $s1 $s0 endPOLoopL2
+  lw $a0 colors + white
+  lw $a1 lettreL2X($s1)
+  lw $a2 lettreL2Y($s1)
+  jal printColorAtPosition
+  addu $s1 $s1 4
+  j POLoopL2
+endPOLoopL2:
+
+
+lw $ra 0($sp)
+lw $s0 4($sp)
+lw $s1 8($sp)
+addu $sp $sp 12
+jr $ra
+
+
 
 # Fin.
 
