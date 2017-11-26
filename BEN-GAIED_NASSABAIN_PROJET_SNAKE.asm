@@ -68,24 +68,24 @@
 
 
 ################################################################################
-#                  Fonctions d'affichage et d'entrée clavier                   #
+#                  Fonctions d'affichage et d'entrï¿½e clavier                   #
 ################################################################################
 
-# Ces fonctions s'occupent de l'affichage et des entrées clavier.
+# Ces fonctions s'occupent de l'affichage et des entrï¿½es clavier.
 # Il n'est pas obligatoire de comprendre ce qu'elles font.
 
 .data
 
-# Tampon d'affichage du jeu 256*256 de manière linéaire.
+# Tampon d'affichage du jeu 256*256 de maniï¿½re linï¿½aire.
 
 frameBuffer: .word 0 : 1024  # Frame buffer
 
 # Code couleur pour l'affichage
-# Codage des couleurs 0xwwxxyyzz où
+# Codage des couleurs 0xwwxxyyzz oï¿½
 #   ww = 00
-#   00 <= xx <= ff est la couleur rouge en hexadécimal
-#   00 <= yy <= ff est la couleur verte en hexadécimal
-#   00 <= zz <= ff est la couleur bleue en hexadécimal
+#   00 <= xx <= ff est la couleur rouge en hexadï¿½cimal
+#   00 <= yy <= ff est la couleur verte en hexadï¿½cimal
+#   00 <= zz <= ff est la couleur bleue en hexadï¿½cimal
 
 colors: .word 0x00000000, 0x00ff0000, 0xff00ff00, 0x00396239, 0x00ff00ff, 0x00ffffff, 0x00000059
 .eqv black 0
@@ -98,7 +98,7 @@ colors: .word 0x00000000, 0x00ff0000, 0xff00ff00, 0x00396239, 0x00ff00ff, 0x00ff
 
 rainbow: .word 0x0000ffff, 0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493,0x00ff0000,0x00ff3300,0x00ffff00,0x0000cc00,0x00009999,0x0099ff,0x00ffcccc,0x009900cc,0x00ff0099,0x0000ff00,0x00fea347,0x00ff1493
 
-# Dernière position connue de la queue du serpent.
+# Derniï¿½re position connue de la queue du serpent.
 
 lastSnakePiece: .word 0, 0
 
@@ -106,7 +106,7 @@ lastSnakePiece: .word 0, 0
 j main
 
 ############################# printColorAtPosition #############################
-# Paramètres: $a0 La valeur de la couleur
+# Paramï¿½tres: $a0 La valeur de la couleur
 #             $a1 La position en X
 #             $a2 La position en Y
 # Retour: Aucun
@@ -122,9 +122,9 @@ sw $a0 frameBuffer($t0)
 jr $ra
 
 ################################ resetAffichage ################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
-# Effet de bord: Réinitialise tout l'affichage avec la couleur noir
+# Effet de bord: Rï¿½initialise tout l'affichage avec la couleur noir
 ################################################################################
 
 resetAffichage:
@@ -143,10 +143,10 @@ endRALoop2:
 jr $ra
 
 ################################## printSnake ##################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
 # Effet de bord: Change la couleur de l'affichage aux emplacement ou se
-#                trouve le serpent et sauvegarde la dernière position connue de
+#                trouve le serpent et sauvegarde la derniï¿½re position connue de
 #                la queue du serpent.
 ################################################################################
 
@@ -192,7 +192,7 @@ addu $sp $sp 12
 jr $ra
 
 ################################ printObstacles ################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
 # Effet de bord: Change la couleur de l'affichage aux emplacement des obstacles.
 ################################################################################
@@ -224,9 +224,9 @@ addu $sp $sp 12
 jr $ra
 
 ################################## printCandy ##################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
-# Effet de bord: Change la couleur de l'affichage à l'emplacement du bonbon.
+# Effet de bord: Change la couleur de l'affichage ï¿½ l'emplacement du bonbon.
 ################################################################################
 
 printCandy:
@@ -256,9 +256,9 @@ addu $sp $sp 4
 jr $ra
 
 ################################## printGame ###################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
-# Effet de bord: Effectue l'affichage de la totalité des éléments du jeu.
+# Effet de bord: Effectue l'affichage de la totalitï¿½ des ï¿½lï¿½ments du jeu.
 ################################################################################
 
 printGame:
@@ -275,7 +275,7 @@ addu $sp $sp 4
 jr $ra
 
 ############################## getRandomExcluding ##############################
-# Paramètres: $a0 Un entier x | 0 <= x < tailleGrille
+# Paramï¿½tres: $a0 Un entier x | 0 <= x < tailleGrille
 # Retour: $v0 Un entier y | 0 <= y < tailleGrille, y != x
 ################################################################################
 
@@ -289,9 +289,9 @@ move $v0 $a0
 jr $ra
 
 ########################### newRandomObjectPosition ############################
-# Description: Renvoie une position aléatoire sur un emplacement non utilisé
+# Description: Renvoie une position alï¿½atoire sur un emplacement non utilisï¿½
 #              qui ne se trouve pas devant le serpent.
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: $v0 Position X du nouvel objet
 #         $v1 Position Y du nouvel objet
 ################################################################################
@@ -364,7 +364,7 @@ addu $sp $sp 4
 j newRandomObjectPosition
 
 ################################# getInputVal ##################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: $v0 La valeur 0 (haut), 1 (droite), 2 (bas), 3 (gauche), 4 erreur
 ################################################################################
 
@@ -400,7 +400,7 @@ GIend:
 jr $ra
 
 ################################ sleepMillisec #################################
-# Paramètres: $a0 Le temps en milli-secondes qu'il faut passer dans cette
+# Paramï¿½tres: $a0 Le temps en milli-secondes qu'il faut passer dans cette
 #             fonction (approximatif)
 # Retour: Aucun
 ################################################################################
@@ -422,7 +422,7 @@ jr $ra
 
 ##################################### main #####################################
 # Description: Boucle principal du jeu
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
 ################################################################################
 
@@ -446,7 +446,7 @@ jal updateGameStatus
 jal conditionFinJeu
 bnez $v0 gameOver
 jal printGame
-li $a0 100	# c'était a 500
+li $a0 500	# c'ï¿½tait a 500
 jal sleepMillisec
 j mainloop
 
@@ -459,24 +459,24 @@ syscall
 #                                Partie Projet                                 #
 ################################################################################
 
-# À vous de jouer !
+# ï¿½ vous de jouer !
 
 .data
 
 tailleGrille:  .word 16        # Nombre de case du jeu dans une dimension.
 
-# La tête du serpent se trouve à (snakePosX[0], snakePosY[0]) et la queue à
+# La tï¿½te du serpent se trouve ï¿½ (snakePosX[0], snakePosY[0]) et la queue ï¿½
 # (snakePosX[tailleSnake - 1], snakePosY[tailleSnake - 1])
 tailleSnake:   .word 1         # Taille actuelle du serpent.
-snakePosX:     .word 0 : 1024  # Coordonnées X du serpent ordonné de la tête à la queue.
-snakePosY:     .word 0 : 1024  # Coordonnées Y du serpent ordonné de la t.
+snakePosX:     .word 0 : 1024  # Coordonnï¿½es X du serpent ordonnï¿½ de la tï¿½te ï¿½ la queue.
+snakePosY:     .word 0 : 1024  # Coordonnï¿½es Y du serpent ordonnï¿½ de la t.
 
-# Les directions sont représentés sous forme d'entier allant de 0 à 3:
+# Les directions sont reprï¿½sentï¿½s sous forme d'entier allant de 0 ï¿½ 3:
 snakeDir:      .word 1         # Direction du serpent: 0 (haut), 1 (droite)
                                #                       2 (bas), 3 (gauche)
-numObstacles:  .word 0         # Nombre actuel d'obstacle présent dans le jeu.
-obstaclesPosX: .word 0 : 1024  # Coordonnées X des obstacles
-obstaclesPosY: .word 0 : 1024  # Coordonnées Y des obstacles
+numObstacles:  .word 0         # Nombre actuel d'obstacle prï¿½sent dans le jeu.
+obstaclesPosX: .word 0 : 1024  # Coordonnï¿½es X des obstacles
+obstaclesPosY: .word 0 : 1024  # Coordonnï¿½es Y des obstacles
 candy:         .word 0, 0      # Position du bonbon (X,Y)
 scoreJeu:      .word 0         # Score obtenu par le joueur
 
@@ -493,6 +493,9 @@ lettreL2X:	.word 1, 2, 3, 4, 5, 5
 lettreL2Y:	.word 8, 8, 8, 8, 8, 9
 
 # chiffres
+tmpX:		.word 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+tmpY:		.word 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+
 chiffre0X:	.word 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4
 chiffre0Y:	.word 0, 1, 2, 0, 2, 0, 2, 0, 2, 0, 1, 2
 
@@ -514,8 +517,8 @@ chiffre5Y:	.word 0, 1, 2, 0, 0, 1, 2, 2, 0, 1, 2
 chiffre6X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 3, 4, 4, 4
 chiffre6Y:	.word 0, 1, 2, 0, 0, 1, 2, 0, 2, 0, 1 ,2
 
-chiffre7X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 4
-chiffre7Y:	.word 0, 1, 2, 2, 0, 1, 2, 2, 2
+chiffre7X:	.word 0, 0, 0, 1, 2, 2, 3, 4
+chiffre7Y:	.word 0, 1, 2, 2, 1, 2, 2, 2
 
 chiffre8X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4
 chiffre8Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 0, 2, 0, 1, 2
@@ -523,22 +526,25 @@ chiffre8Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 0, 2, 0, 1, 2
 chiffre9X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 4, 4, 4
 chiffre9Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 2, 0, 1, 2
 
+craneX:		.word 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 7, 7, 7
+craneY:		.word 6, 7, 8, 9, 10, 5, 6, 7, 8, 9, 10, 11, 5, 8, 11, 5, 8, 11, 5, 6, 7, 8, 9, 10, 11, 6, 8, 10, 6, 8, 10
+
 
 .text
 
 ################################# majDirection #################################
-# Paramètres: $a0 La nouvelle position demandée par l'utilisateur. La valeur
-#                 étant le retour de la fonction getInputVal.
+# Paramï¿½tres: $a0 La nouvelle position demandï¿½e par l'utilisateur. La valeur
+#                 ï¿½tant le retour de la fonction getInputVal.
 # Retour: Aucun
-# Effet de bord: La direction du serpent à été mise à jour.
-# Post-condition: La valeur du serpent reste intacte si une commande illégale
-#                 est demandée, i.e. le serpent ne peut pas faire de demi-tour
-#                 en un unique tour de jeu. Cela s'apparente à du cannibalisme
-#                 et à été proscrit par la loi dans les sociétés reptiliennes.
+# Effet de bord: La direction du serpent ï¿½ ï¿½tï¿½ mise ï¿½ jour.
+# Post-condition: La valeur du serpent reste intacte si une commande illï¿½gale
+#                 est demandï¿½e, i.e. le serpent ne peut pas faire de demi-tour
+#                 en un unique tour de jeu. Cela s'apparente ï¿½ du cannibalisme
+#                 et ï¿½ ï¿½tï¿½ proscrit par la loi dans les sociï¿½tï¿½s reptiliennes.
 ################################################################################
 
 majDirection:
-# En haut, ... en bas, ... à gauche, ... à droite, ... ces soirées là ...
+# En haut, ... en bas, ... ï¿½ gauche, ... ï¿½ droite, ... ces soirï¿½es lï¿½ ...
 
 # prologue 
 
@@ -548,7 +554,7 @@ move $t0 $a0				# travailler sur variable temporaire
 beq $t0 $t4 finMajDirection		# si 4 alors erreur alors meme direction qu'avant
 
 la $t1 snakeDir			# adresse de snakeDir
-lw $t2 0($t1)			# on stocke la direction dans $t2
+lw $t2 0($t1)			#ï¿½on stocke la direction dans $t2
 
 li $t3 0
 beq $t2 $t3 dirHaut
@@ -590,12 +596,12 @@ finMajDirection:
 jr $ra
 
 ############################### updateGameStatus ###############################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
-# Effet de bord: L'état du jeu est mis à jour d'un pas de temps. Il faut donc :
+# Effet de bord: L'ï¿½tat du jeu est mis ï¿½ jour d'un pas de temps. Il faut donc :
 #                  - Faire bouger le serpent
-#                  - Tester si le serpent à manger le bonbon
-#                    - Si oui déplacer le bonbon et ajouter un nouvel obstacle
+#                  - Tester si le serpent ï¿½ manger le bonbon
+#                    - Si oui dï¿½placer le bonbon et ajouter un nouvel obstacle
 ################################################################################
 
 updateGameStatus:
@@ -619,8 +625,8 @@ lw $t2 0($t0)
 
 
 testCandy:
-# (t1, t2) contiennent la position de la tête (x,y)
-# on cherche la position du bonbon
+# (t1, t2) contiennent la position de la tï¿½te (x,y)
+#ï¿½on cherche la position du bonbon
 
 la $t0 candy
 lw $t3 0($t0)
@@ -638,7 +644,7 @@ lw $t5 0($t0)
 addi $t5 $t5 1			# taille++
 sw $t5 0($t0)
 
-jal newRandomObjectPosition	# on donne une nouvelle position aléatoire au bonbon
+jal newRandomObjectPosition	# on donne une nouvelle position alï¿½atoire au bonbon
 move $t0 $v0
 move $t1 $v1
 la $t2 candy
@@ -646,12 +652,12 @@ sw $t0 0($t2)
 sw $t1 4($t2)
 
 genereObstacle:
-la $s0 scoreJeu			# on recupere le score pour stocker le nouveau obstacle à la position
+la $s0 scoreJeu			# on recupere le score pour stocker le nouveau obstacle ï¿½ la position
 lw $s1 0($s0)			#obstaclesPosX[score] et obstaclesPosY[score]
 
 mulu $t2 $s1 4			# t2 = s1 * 4 (t2 = score * 4)
 
-la $s2 obstaclesPosX		# adresses de tableaux des coordonnées des obstacles
+la $s2 obstaclesPosX		# adresses de tableaux des coordonnï¿½es des obstacles
 la $s3 obstaclesPosY
 
 add $s2 $s2 $t2
@@ -675,8 +681,6 @@ addi $s1 $s1 1			# score++
 sw $s1 0($s0)
 
 
-
-
 deplace:
 
 deplaceCorps:
@@ -695,7 +699,7 @@ beq $s4 $t1 deplaceTete
 subu $t7 $s2 4
 
 move $t0 $s4			# $t0 a la taille 
-subu $t0 $t0 2			# taille -2 dans t0
+subu $t0 $t0 2			#ï¿½taille -2 dans t0
 mulu $t0 $t0 4
 add $s2 $t0 $s2
 add $s3 $t0 $s3
@@ -730,15 +734,15 @@ beq $s1 $t2 deplaceTeteBas
 
 deplaceTeteGauche:		# y--
 la $t0 snakePosY		# adresse de snakePosY
-lw $t1 0($t0)			# position Y de la tete du serpent
-subu $t1 $t1 1			# $t1 nouvelle position Y
+lw $t1 0($t0)			#ï¿½position Y de la tete du serpent
+subu $t1 $t1 1			#ï¿½$t1 nouvelle position Y
 sw $t1 0($t0)
 
 j finDeplace
 
 deplaceTeteHaut:		# x++
 la $t0 snakePosX		# adresse de snakePosX
-lw $t1 0($t0)			# position X de la tete du serpent
+lw $t1 0($t0)			#ï¿½position X de la tete du serpent
 addi $t1 $t1 1
 sw $t1 0($t0)
 
@@ -746,7 +750,7 @@ j finDeplace
 
 deplaceTeteDroite:		# y++
 la $t0 snakePosY		# adresse de snakePosY
-lw $t1 0($t0)			# position Y de la tete du serpent
+lw $t1 0($t0)			#ï¿½position Y de la tete du serpent
 addi $t1 $t1 1
 sw $t1 0($t0)
 
@@ -754,7 +758,7 @@ j finDeplace
 
 deplaceTeteBas:		# x--
 la $t0 snakePosX		# adresse de snakePosX
-lw $t1 0($t0)			# position X de la tete du serpent
+lw $t1 0($t0)			#ï¿½position X de la tete du serpent
 subu $t1 $t1 1
 sw $t1 0($t0)
 
@@ -771,7 +775,7 @@ addu $sp $sp 20
 jr $ra
 
 ############################### conditionFinJeu ################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: $v0 La valeur 0 si le jeu doit continuer ou toute autre valeur sinon.
 ################################################################################
 
@@ -791,8 +795,8 @@ sw $a0 32($sp)
 # s1 & s2
 
 # corps:
-la $s0 obstaclesPosX		# tableau avec la cordonné X des obstacles
-la $s1 obstaclesPosY		# tableau avec la cordonné Y des obstacles
+la $s0 obstaclesPosX		# tableau avec la cordonnï¿½ X des obstacles
+la $s1 obstaclesPosY		# tableau avec la cordonnï¿½ Y des obstacles
 
 la $s2 numObstacles
 lw $t2 0($s2)
@@ -864,7 +868,7 @@ bge $s3 $s5 perdu
 
 continue:
 li $v0 0
-# épilogue:
+# ï¿½pilogue:
 finTestes:
 lw $s0 0($sp)
 lw $s1 4($sp)
@@ -879,15 +883,24 @@ addi $sp $sp 36
 jr $ra
 
 ############################### affichageFinJeu ################################
-# Paramètres: Aucun
+# Paramï¿½tres: Aucun
 # Retour: Aucun
 # Effet de bord: Affiche le score du joueur dans le terminal suivi d'un petit
-#                mot gentil (Exemple : «Quelle pitoyable prestation !»).
+#                mot gentil (Exemple : ï¿½Quelle pitoyable prestation !ï¿½).
 # Bonus: Afficher le score en surimpression du jeu.
 ################################################################################
 
 affichageFinJeu:
 
+subu $sp $sp 20
+sw $ra 0($sp)
+sw $s0 4($sp)
+sw $s1 8($sp)
+sw $s2 12($sp)
+sw $s3 16($sp)
+
+
+# centaine
 la $t0 scoreJeu
 
 la $a0 message
@@ -898,68 +911,699 @@ lw $a0 0($t0)
 li $v0 1
 syscall
 
+jal resetAffichage
+
+# nouveau
+
+
+la $s0 scoreJeu
+lw $t0 0($s0)
+li $t1 100
+
+div $t0 $t1
+mflo $s0 	# s0 Ã  la centaine
+
+# jusqua ici ca marche
+
+
 # afficher niveau
-afficheLVL:
-subu $sp $sp 12
+j switcher1				# switch marche bien
+finSwitch1:
+# on a le tableau X dans s1
+#Â le tableau Y dans s2
+# le numÃ©ro de bits dans $s3
+li $t6 10
+j decalerX1
+finDecalageX1:
+
+li $t6 3
+j decalerY1
+finDecalageY1:
+
+
+
+jal printChiffre1
+
+
+
+
+# dizaine
+la $t0 scoreJeu
+
+la $a0 message
+li $v0 4
+syscall
+
+lw $a0 0($t0)
+li $v0 1
+syscall
+
+
+# nouveau
+
+la $s0 scoreJeu
+lw $t0 0($s0)
+li $t1 100
+
+div $t0 $t1
+mfhi $s0 	# s0 Ã  le reste
+li $t1 10
+div $s0 $t1
+mflo $s0
+
+# jusqua ici ca marche
+
+
+# afficher niveau
+j switcher2				# switch marche bien
+finSwitch2:
+# on a le tableau X dans s1
+#Â le tableau Y dans s2
+# le numÃ©ro de bits dans $s3
+li $t6 10
+j decalerX2
+finDecalageX2:
+
+li $t6 7
+j decalerY2
+finDecalageY2:
+
+
+
+jal printChiffre2
+
+
+# unitÃ©s
+la $t0 scoreJeu
+
+la $a0 message
+li $v0 4
+syscall
+
+lw $a0 0($t0)
+li $v0 1
+syscall
+
+
+
+# nouveau
+
+la $s0 scoreJeu
+lw $t0 0($s0)
+li $t1 100
+
+div $t0 $t1
+mfhi $s0 	# s0 Ã  le reste
+li $t1 10
+div $s0 $t1
+mfhi $s0
+
+# jusqua ici ca marche
+
+
+# afficher niveau
+j switcher3				# switch marche bien
+finSwitch3:
+# on a le tableau X dans s1
+#Â le tableau Y dans s2
+# le numÃ©ro de bits dans $s3
+li $t6 10
+j decalerX3
+finDecalageX3:
+
+li $t6 11
+j decalerY3
+finDecalageY3:
+
+
+
+jal printChiffre3
+
+
+j printCrane
+
+
+#noveau
+
+# 1
+
+
+decalerX1:
+#Â decalage dans t6
+# adresse du chiffre dans s1
+# chiffre Ã  afficher s0
+
+move $t3 $s3
+
+la $t5 tmpX
+
+decXLoop1:
+beqz $t3 finDecalageX1
+lw $t4 0($s1)
+
+add $t4 $t4 $t6
+sw $t4 0($t5)
+
+addi $s1 $s1 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decXLoop1
+
+
+#decaler le lettre sur l'axe Y
+decalerY1:
+move $t3 $s3
+
+la $t5 tmpY
+
+decYLoop1:
+beqz $t3 finDecalageY1
+lw $t4 0($s2)
+add $t4 $t6 $t4
+sw $t4 0($t5)
+
+addi $s2 $s2 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decYLoop1
+
+
+
+# renvoie l'adresse des tableaux X et Y du chiffre donnÃ©
+# chiffre cherchÃ© en $s0
+# renvoie le resultat dans $s1 et $s2
+# nombre de bits dans $s3
+switcher1:
+beqz $s0 cestZero1
+
+li $t0 1
+beq $s0 $t0 cestUn1
+
+li $t0 2
+beq $s0 $t0 cestDeux1
+
+li $t0 3
+beq $s0 $t0 cestTrois1
+
+li $t0 4
+beq $s0 $t0 cestQuatre1
+
+li $t0 5
+beq $s0 $t0 cestCinq1
+
+li $t0 6
+beq $s0 $t0 cestSix1
+
+li $t0 7
+beq $s0 $t0 cestSept1
+
+li $t0 8
+beq $s0 $t0 cestHuit1
+
+cestNeuf1:
+la $s1 chiffre9X
+la $s2 chiffre9Y
+li $s3 12
+
+j finSwitch1
+
+cestHuit1:
+la $s1 chiffre8X
+la $s2 chiffre8Y
+li $s3 13
+
+j finSwitch1
+
+cestSept1:
+la $s1 chiffre7X
+la $s2 chiffre7Y
+li $s3 9
+
+j finSwitch1
+
+cestSix1:
+la $s1 chiffre6X
+la $s2 chiffre6Y
+li $s3 12
+
+j finSwitch1
+
+cestCinq1:
+la $s1 chiffre5X
+la $s2 chiffre5Y
+li $s3 11
+
+j finSwitch1
+
+cestQuatre1:
+la $s1 chiffre4X
+la $s2 chiffre4Y
+li $s3 9
+
+j finSwitch1
+
+cestTrois1:
+la $s1 chiffre3X
+la $s2 chiffre3Y
+li $s3 11
+
+j finSwitch1
+
+cestDeux1:
+la $s1 chiffre2X
+la $s2 chiffre2Y
+li $s3 12
+
+j finSwitch1
+
+cestUn1:
+la $s1 chiffre1X
+la $s2 chiffre1Y
+li $s3 5
+
+j finSwitch1
+
+cestZero1:
+la $s1 chiffre0X
+la $s2 chiffre0Y
+li $s3 12
+
+j finSwitch1
+
+printChiffre1:
+subi $sp $sp 4
 sw $ra 0($sp)
-sw $s0 4($sp)
-sw $s1 8($sp)
 
 
-#afficher le premier L
-li $s0 6
-sll $s0 $s0 2
-li $s1 0
+move $t3 $s3
+la $t5 tmpX
+la $t6 tmpY
 
-POLoopL1:
-bge $s1 $s0 endPOLoopL1
+PCLoop1: 
+
+beqz $t3 endPCLoop1
+
+  lw $a1 0($t5)
+  lw $a2 0($t6)
   lw $a0 colors + white
-  lw $a1 lettreL1X($s1)
-  lw $a2 lettreL1Y($s1)
   jal printColorAtPosition
-  addu $s1 $s1 4
-  j POLoopL1
-endPOLoopL1:
+ 
+  subu $t3 $t3 1
+  addi $t5 $t5 4
+  addi $t6 $t6 4
+  j PCLoop1
 
-#afficher le V
-li $s0 9
-sll $s0 $s0 2
-li $s1 0
+endPCLoop1:
+lw $ra 0($sp)
+addi $sp $sp 4
+jr $ra
 
-POLoopV:
-bge $s1 $s0 endPOLoopV
+
+
+
+
+
+#2
+
+
+decalerX2:
+#Â decalage dans t6
+# adresse du chiffre dans s1
+# chiffre Ã  afficher s0
+
+move $t3 $s3
+
+la $t5 tmpX
+
+decXLoop2:
+beqz $t3 finDecalageX2
+lw $t4 0($s1)
+
+add $t4 $t4 $t6
+sw $t4 0($t5)
+
+addi $s1 $s1 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decXLoop2
+
+
+#decaler le lettre sur l'axe Y
+decalerY2:
+move $t3 $s3
+
+la $t5 tmpY
+
+decYLoop2:
+beqz $t3 finDecalageY2
+lw $t4 0($s2)
+add $t4 $t6 $t4
+sw $t4 0($t5)
+
+addi $s2 $s2 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decYLoop2
+
+
+
+# renvoie l'adresse des tableaux X et Y du chiffre donnÃ©
+# chiffre cherchÃ© en $s0
+# renvoie le resultat dans $s1 et $s2
+# nombre de bits dans $s3
+switcher2:
+beqz $s0 cestZero2
+
+li $t0 1
+beq $s0 $t0 cestUn2
+
+li $t0 2
+beq $s0 $t0 cestDeux2
+
+li $t0 3
+beq $s0 $t0 cestTrois2
+
+li $t0 4
+beq $s0 $t0 cestQuatre2
+
+li $t0 5
+beq $s0 $t0 cestCinq2
+
+li $t0 6
+beq $s0 $t0 cestSix2
+
+li $t0 7
+beq $s0 $t0 cestSept2
+
+li $t0 8
+beq $s0 $t0 cestHuit2
+
+cestNeuf2:
+la $s1 chiffre9X
+la $s2 chiffre9Y
+li $s3 12
+
+j finSwitch2
+
+cestHuit2:
+la $s1 chiffre8X
+la $s2 chiffre8Y
+li $s3 13
+
+j finSwitch2
+
+cestSept2:
+la $s1 chiffre7X
+la $s2 chiffre7Y
+li $s3 9
+
+j finSwitch2
+
+cestSix2:
+la $s1 chiffre6X
+la $s2 chiffre6Y
+li $s3 12
+
+j finSwitch2
+
+cestCinq2:
+la $s1 chiffre5X
+la $s2 chiffre5Y
+li $s3 11
+
+j finSwitch2
+
+cestQuatre2:
+la $s1 chiffre4X
+la $s2 chiffre4Y
+li $s3 9
+
+j finSwitch2
+
+cestTrois2:
+la $s1 chiffre3X
+la $s2 chiffre3Y
+li $s3 11
+
+j finSwitch2
+
+cestDeux2:
+la $s1 chiffre2X
+la $s2 chiffre2Y
+li $s3 12
+
+j finSwitch2
+
+cestUn2:
+la $s1 chiffre1X
+la $s2 chiffre1Y
+li $s3 5
+
+j finSwitch2
+
+cestZero2:
+la $s1 chiffre0X
+la $s2 chiffre0Y
+li $s3 12
+
+j finSwitch2
+
+printChiffre2:
+subi $sp $sp 4
+sw $ra 0($sp)
+
+
+move $t3 $s3
+la $t5 tmpX
+la $t6 tmpY
+
+PCLoop2: 
+
+beqz $t3 endPCLoop2
+
+  lw $a1 0($t5)
+  lw $a2 0($t6)
   lw $a0 colors + white
-  lw $a1 lettreVX($s1)
-  lw $a2 lettreVY($s1)
   jal printColorAtPosition
-  addu $s1 $s1 4
-  j POLoopV
-endPOLoopV:
+ 
+  subu $t3 $t3 1
+  addi $t5 $t5 4
+  addi $t6 $t6 4
+  j PCLoop2
 
-# afficher le deuxième L
-li $s0 6
-sll $s0 $s0 2
-li $s1 0
+endPCLoop2:
+lw $ra 0($sp)
+addi $sp $sp 4
+jr $ra
 
-POLoopL2:
-bge $s1 $s0 endPOLoopL2
+
+# 3
+
+
+
+decalerX3:
+#Â decalage dans t6
+# adresse du chiffre dans s1
+# chiffre Ã  afficher s0
+
+move $t3 $s3
+
+la $t5 tmpX
+
+decXLoop3:
+beqz $t3 finDecalageX3
+lw $t4 0($s1)
+
+add $t4 $t4 $t6
+sw $t4 0($t5)
+
+addi $s1 $s1 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decXLoop3
+
+
+#decaler le lettre sur l'axe Y
+decalerY3:
+move $t3 $s3
+
+la $t5 tmpY
+
+decYLoop3:
+beqz $t3 finDecalageY3
+lw $t4 0($s2)
+add $t4 $t6 $t4
+sw $t4 0($t5)
+
+addi $s2 $s2 4
+addi $t5 $t5 4
+subu $t3 $t3 1
+j decYLoop3
+
+
+
+# renvoie l'adresse des tableaux X et Y du chiffre donnÃ©
+# chiffre cherchÃ© en $s0
+# renvoie le resultat dans $s1 et $s2
+# nombre de bits dans $s3
+switcher3:
+beqz $s0 cestZero3
+
+li $t0 1
+beq $s0 $t0 cestUn3
+
+li $t0 2
+beq $s0 $t0 cestDeux3
+
+li $t0 3
+beq $s0 $t0 cestTrois3
+
+li $t0 4
+beq $s0 $t0 cestQuatre3
+
+li $t0 5
+beq $s0 $t0 cestCinq3
+
+li $t0 6
+beq $s0 $t0 cestSix3
+
+li $t0 7
+beq $s0 $t0 cestSept3
+
+li $t0 8
+beq $s0 $t0 cestHuit3
+
+cestNeuf3:
+la $s1 chiffre9X
+la $s2 chiffre9Y
+li $s3 12
+
+j finSwitch3
+
+cestHuit3:
+la $s1 chiffre8X
+la $s2 chiffre8Y
+li $s3 13
+
+j finSwitch3
+
+cestSept3:
+la $s1 chiffre7X
+la $s2 chiffre7Y
+li $s3 9
+
+j finSwitch3
+
+cestSix3:
+la $s1 chiffre6X
+la $s2 chiffre6Y
+li $s3 12
+
+j finSwitch3
+
+cestCinq3:
+la $s1 chiffre5X
+la $s2 chiffre5Y
+li $s3 11
+
+j finSwitch3
+
+cestQuatre3:
+la $s1 chiffre4X
+la $s2 chiffre4Y
+li $s3 9
+
+j finSwitch3
+
+cestTrois3:
+la $s1 chiffre3X
+la $s2 chiffre3Y
+li $s3 11
+
+j finSwitch3
+
+cestDeux3:
+la $s1 chiffre2X
+la $s2 chiffre2Y
+li $s3 12
+
+j finSwitch3
+
+cestUn3:
+la $s1 chiffre1X
+la $s2 chiffre1Y
+li $s3 5
+
+j finSwitch3
+
+cestZero3:
+la $s1 chiffre0X
+la $s2 chiffre0Y
+li $s3 12
+
+j finSwitch3
+
+printChiffre3:
+subi $sp $sp 4
+sw $ra 0($sp)
+
+
+move $t3 $s3
+la $t5 tmpX
+la $t6 tmpY
+
+PCLoop3: 
+
+beqz $t3 endPCLoop3
+
+  lw $a1 0($t5)
+  lw $a2 0($t6)
   lw $a0 colors + white
-  lw $a1 lettreL2X($s1)
-  lw $a2 lettreL2Y($s1)
   jal printColorAtPosition
-  addu $s1 $s1 4
-  j POLoopL2
-endPOLoopL2:
+ 
+  subu $t3 $t3 1
+  addi $t5 $t5 4
+  addi $t6 $t6 4
+  j PCLoop3
+
+endPCLoop3:
+lw $ra 0($sp)
+addi $sp $sp 4
+jr $ra
 
 
+printCrane:
+
+
+li $s0 31
+la $s1 craneX
+la $s2 craneY
+
+craneLoop:
+beqz $s0 finCrane
+lw $a1 0($s1)
+lw $a2 0($s2)
+lw $a0 colors + white
+jal printColorAtPosition
+
+addi $s1 $s1 4
+addi $s2 $s2 4
+subi $s0 $s0 1
+j craneLoop
+
+finCrane:
+
+
+finito:
 lw $ra 0($sp)
 lw $s0 4($sp)
 lw $s1 8($sp)
-addu $sp $sp 12
+lw $s2 12($sp)
+lw $s3 16($sp)
+addu $sp $sp 20
 jr $ra
 
+  
 
 
-# Fin.
 
-jr $ra
