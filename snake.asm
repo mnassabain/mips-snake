@@ -519,7 +519,7 @@ chiffre6X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 3, 4, 4, 4
 chiffre6Y:	.word 0, 1, 2, 0, 0, 1, 2, 0, 2, 0, 1 ,2
 
 chiffre7X:	.word 0, 0, 0, 1, 2, 2, 2, 3, 4
-chiffre7Y:	.word 0, 1, 2, 2, 0, 1, 2, 2, 2
+chiffre7Y:	.word 0, 1, 2, 2, 1, 2, 3, 2, 2
 
 chiffre8X:	.word 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4
 chiffre8Y:	.word 0, 1, 2, 0, 2, 0, 1, 2, 0, 2, 0, 1, 2
