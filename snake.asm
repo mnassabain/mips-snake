@@ -446,7 +446,7 @@ jal updateGameStatus
 jal conditionFinJeu
 bnez $v0 gameOver
 jal printGame
-li $a0 100	# c'était a 500
+li $a0 500	# c'était a 500
 jal sleepMillisec
 j mainloop
 
@@ -478,7 +478,7 @@ numObstacles:  .word 0         # Nombre actuel d'obstacle présent dans le jeu.
 obstaclesPosX: .word 0 : 1024  # Coordonnées X des obstacles
 obstaclesPosY: .word 0 : 1024  # Coordonnées Y des obstacles
 candy:         .word 0, 0      # Position du bonbon (X,Y)
-scoreJeu:      .word 700	       # Score obtenu par le joueur
+scoreJeu:      .word 0	       # Score obtenu par le joueur
 
 message:		.asciiz "Votre score est: "
 
